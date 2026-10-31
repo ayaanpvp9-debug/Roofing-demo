@@ -1,0 +1,14 @@
+import { defineConfig } from "vite";
+export default defineConfig({
+  server: { host: "0.0.0.0", allowedHosts: [".e2b.app"] },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          motion: ["framer-motion"],
+          gsap: ["gsap", "gsap/ScrollTrigger"],
+        },
+      },
+    },
+  },
+});
