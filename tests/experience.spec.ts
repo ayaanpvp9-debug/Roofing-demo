@@ -9,20 +9,33 @@ test("desktop cinematic scroll, projects, comparison, and demo validation", asyn
     if (msg.type() === "error") errors.push(msg.text());
   });
   await page.goto("/");
-  await expect(page.locator(".cinematic-intro")).toBeHidden({ timeout: 7000 });
+  await expect(page.locator(".cinematic-intro")).toBeHidden({ timeout: 20000 });
   await expect(page.locator(".hero-char")).toHaveCount(24);
   expect(
     await page
       .locator(".hero-image")
       .evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0),
   ).toBeTruthy();
-  await expect(page.locator(".pin-spacer")).toHaveCount(2);
+  await expect(page.locator(".pin-spacer")).toHaveCount(3);
   await expect(page.locator("html")).toHaveClass(/lenis/);
+  await page.evaluate(() => window.scrollTo(0, 550));
+  await page.waitForTimeout(1600);
+  expect(
+    await page
+      .locator(".hero-title .word")
+      .first()
+      .evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41),
+  ).toBeLessThan(-100);
+  expect(
+    await page
+      .locator(".hero-image")
+      .evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).a),
+  ).toBeGreaterThan(1.2);
   const anatomy = page.locator("#anatomy");
   const start = await anatomy.evaluate(
     (el) => el.getBoundingClientRect().top + scrollY,
   );
-  await page.evaluate((y) => window.scrollTo(0, y), start + 1100);
+  await page.evaluate((y) => window.scrollTo(0, y), start + 1450);
   await page.waitForTimeout(1600);
   expect(Math.abs((await anatomy.boundingBox())!.y)).toBeLessThan(5);
   expect(
@@ -86,11 +99,18 @@ for (const width of [320, 390, 768, 1024, 1440]) {
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     ).toBeTruthy();
-    const headlineFits = await page.locator('.hero-char').last().evaluate(el => el.getBoundingClientRect().right <= innerWidth);
+    const headlineFits = await page
+      .locator(".hero-char")
+      .last()
+      .evaluate((el) => el.getBoundingClientRect().right <= innerWidth);
     expect(headlineFits).toBeTruthy();
     if (width <= 1100) {
       await page.getByRole("button", { name: "Open navigation" }).click();
       await expect(page.locator("#mobile-navigation")).toBeVisible();
+      await expect(page.locator("#mobile-navigation")).toHaveCSS(
+        "opacity",
+        "1",
+      );
       await page.locator("#mobile-navigation a").last().click();
       await expect(page.locator("#mobile-navigation")).toHaveCount(0);
     }

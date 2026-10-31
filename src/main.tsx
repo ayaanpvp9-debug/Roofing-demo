@@ -1,3 +1,4 @@
+import { useKineticMotion, HeroSeal, KineticRibbon } from "./KineticMotion";
 import React, { useState, useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -25,6 +26,8 @@ import {
   SplitText,
 } from "./Storytelling";
 gsap.registerPlugin(ScrollTrigger);
+// Keep GSAP and Lenis on real elapsed time, including after slow frames.
+gsap.ticker.lagSmoothing(0);
 const images = {
   hero: "/images/ridgeline.webp",
   house: "/images/ridgeline.webp",
@@ -90,7 +93,10 @@ const projects = [
     images.modern,
   ],
 ];
+import "./kinetic.css";
+
 function App() {
+  useKineticMotion();
   const [menu, setMenu] = useState(false),
     [service, setService] = useState(0),
     [compare, setCompare] = useState(50),
@@ -119,37 +125,34 @@ function App() {
     const ctx = gsap.context(() => {
       if (reduce) return;
       gsap.from(".hero-char", {
-        yPercent: 115,
-        rotate: 4,
-        opacity: 0,
+        yPercent: 150,
+        rotationX: -110,
+        rotationZ: 12,
+        scaleY: 1.8,
         duration: 0.9,
         stagger: 0.025,
         ease: "power4.out",
         delay: 1.6,
       });
-      gsap.from(".hero-bottom", { opacity: 0, y: 20, duration: 1, delay: 2 });
-      gsap.to(".hero-image", {
-        yPercent: 20,
-        scale: 1.1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".hero",
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
+      gsap.from(".hero-bottom", {
+        clipPath: "inset(0 100% 0 0)",
+        y: 30,
+        duration: 1.2,
+        delay: 2,
       });
-      gsap.utils
-        .toArray<HTMLElement>("[data-reveal]")
-        .forEach((el) =>
-          gsap.from(el, {
-            y: 45,
-            opacity: 0,
+      gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) =>
+        gsap.fromTo(
+          el,
+          { y: 35, clipPath: "inset(0 0 100% 0)" },
+          {
+            y: 0,
+            clipPath: "inset(0 0 0% 0)",
             duration: 0.9,
             ease: "power3.out",
             scrollTrigger: { trigger: el, start: "top 92%" },
-          }),
-        );
+          },
+        ),
+      );
       gsap.utils.toArray<HTMLElement>(".stat-number").forEach((el) => {
         const obj = { n: 0 };
         gsap.to(obj, {
@@ -163,6 +166,8 @@ function App() {
         });
       });
     }, root);
+    ScrollTrigger.sort();
+    ScrollTrigger.refresh();
     const cursor = document.querySelector<HTMLElement>(".cursor");
     const move = (e: PointerEvent) => {
       if (cursor) {
@@ -405,9 +410,10 @@ function App() {
           <motion.div
             id="mobile-navigation"
             className="menu-panel"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ clipPath: "inset(0 0 100% 0)" }}
+            animate={{ clipPath: "inset(0 0 0% 0)" }}
+            exit={{ clipPath: "inset(0 0 100% 0)" }}
+            transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}
           >
             {[
               "Our approach",
@@ -415,15 +421,22 @@ function App() {
               "Selected work",
               "Get an estimate",
             ].map((x, i) => (
-              <a
+              <motion.a
                 key={x}
+                initial={{ y: 100, rotateX: -65 }}
+                animate={{ y: 0, rotateX: 0 }}
+                transition={{
+                  duration: 0.75,
+                  delay: i * 0.08 + 0.1,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
                 onClick={() => setMenu(false)}
                 href={["#about", "#services", "#work", "#contact"][i]}
               >
                 <sup>0{i + 1}</sup>
                 {x}
                 <ArrowUpRight />
-              </a>
+              </motion.a>
             ))}
           </motion.div>
         )}
@@ -439,6 +452,7 @@ function App() {
             sizes="100vw"
           />
           <div className="hero-shade" />
+          <HeroSeal />
           <div className="hero-light" />
           <div className="hero-measure" />
           <div className="hero-topline">
@@ -499,6 +513,7 @@ function App() {
           </span>
           <span className="strip-star">✳</span>
         </div>
+        <KineticRibbon />
         <section className="intro section-pad" id="about">
           <div className="eyebrow" data-reveal>
             <span>01 / THE ROOFCRAFT STANDARD</span>
@@ -618,10 +633,18 @@ function App() {
                   sizes="(max-width: 650px) 90vw, 45vw"
                   alt={services[service][0] + " architectural example"}
                   loading="lazy"
-                  initial={{ opacity: 0, scale: 1.08 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5 }}
+                  initial={{
+                    clipPath: "inset(0 100% 0 0)",
+                    scale: 1.35,
+                    rotate: 4,
+                  }}
+                  animate={{ clipPath: "inset(0 0% 0 0)", scale: 1, rotate: 0 }}
+                  exit={{
+                    clipPath: "inset(0 0 0 100%)",
+                    scale: 0.95,
+                    rotate: -4,
+                  }}
+                  transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}
                 />
               </AnimatePresence>
               <div className="photo-label">
@@ -806,7 +829,7 @@ function App() {
                 "Durable systems and carefully resolved details. Because a higher standard should stand the test of time.",
               ],
             ].map(([n, title, copy]) => (
-              <article key={n} data-reveal>
+              <article key={n}>
                 <span>{n} /</span>
                 <h3>{title}</h3>
                 <p>{copy}</p>
@@ -830,9 +853,17 @@ function App() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={testimonial}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
+                  initial={{
+                    x: "100%",
+                    rotate: 5,
+                    clipPath: "inset(0 0 100% 0)",
+                  }}
+                  animate={{ x: 0, rotate: 0, clipPath: "inset(0 0 0% 0)" }}
+                  exit={{
+                    x: "-100%",
+                    rotate: -5,
+                    clipPath: "inset(100% 0 0 0)",
+                  }}
                   transition={{ duration: 0.35 }}
                 >
                   <blockquote>{quotes[testimonial][0]}</blockquote>

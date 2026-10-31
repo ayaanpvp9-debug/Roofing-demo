@@ -141,7 +141,7 @@ export function RoofAnatomy() {
             id: "roof-anatomy",
             trigger: ref.current,
             start: "top top",
-            end: "+=250%",
+            end: "+=300%",
             pin: true,
             scrub: 1,
             anticipatePin: 1,
@@ -157,14 +157,34 @@ export function RoofAnatomy() {
           .to(".anatomy-photo", { opacity: 0.08, duration: 0.6 }, 0.7)
           .fromTo(
             ".roof-diagram",
-            { opacity: 0, scale: 0.65 },
-            { opacity: 1, scale: 1, duration: 0.8 },
+            {
+              opacity: 1,
+              scale: 0.05,
+              rotationY: -120,
+              rotationZ: -25,
+              z: -500,
+            },
+            {
+              opacity: 1,
+              scale: 1,
+              rotationY: 0,
+              rotationZ: 0,
+              z: 0,
+              duration: 0.8,
+            },
             0.8,
           )
           .fromTo(
             ".roof-layer",
-            { y: 0 },
-            { y: (i) => (i - 1.5) * 65, stagger: 0.08, duration: 1 },
+            { y: 0, rotationX: 0, rotationZ: 0, x: 0 },
+            {
+              y: (i) => (i - 1.5) * 80,
+              x: (i) => (i - 1.5) * 14,
+              rotationX: 18,
+              rotationZ: (i) => (i - 1.5) * 4,
+              stagger: 0.08,
+              duration: 1,
+            },
             1.2,
           )
           .fromTo(
@@ -177,7 +197,15 @@ export function RoofAnatomy() {
           .to(".roof-label", { opacity: 0, duration: 0.35 }, 3.1)
           .to(
             ".roof-layer",
-            { y: 0, duration: 1, stagger: 0.06, ease: "power2.inOut" },
+            {
+              y: 0,
+              x: 0,
+              rotationX: 0,
+              rotationZ: 0,
+              duration: 1,
+              stagger: 0.06,
+              ease: "power2.inOut",
+            },
             3.2,
           )
           .fromTo(
@@ -340,11 +368,51 @@ export function CraftStory() {
         );
         gsap.utils.toArray<HTMLElement>(".craft-panel").forEach((panel) => {
           gsap.fromTo(
-            panel.querySelector("img"),
-            { clipPath: "inset(0 15% 0 0)", scale: 1.08 },
+            panel.querySelector(".craft-copy h2"),
+            { xPercent: 55, rotationY: 50, skewX: -14 },
             {
-              clipPath: "inset(0 0% 0 0)",
+              xPercent: 0,
+              rotationY: 0,
+              skewX: 0,
+              ease: "none",
+              scrollTrigger: {
+                trigger: panel,
+                containerAnimation: tl,
+                start: "left right",
+                end: "left left",
+                scrub: true,
+              },
+            },
+          );
+          gsap.fromTo(
+            panel.querySelector(".craft-number"),
+            { rotation: 90, scale: 0.3 },
+            {
+              rotation: 0,
               scale: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: panel,
+                containerAnimation: tl,
+                start: "left right",
+                end: "left left",
+                scrub: true,
+              },
+            },
+          );
+          gsap.fromTo(
+            panel.querySelector("img"),
+            {
+              clipPath: "polygon(20% 0,100% 15%,80% 100%,0 85%)",
+              scale: 1.3,
+              rotationZ: 8,
+              rotationY: -25,
+            },
+            {
+              clipPath: "polygon(0 0,100% 0,100% 100%,0 100%)",
+              scale: 1,
+              rotationZ: 0,
+              rotationY: 0,
               ease: "none",
               scrollTrigger: {
                 trigger: panel,

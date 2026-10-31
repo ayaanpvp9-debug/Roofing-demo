@@ -65,6 +65,21 @@ No Vercel/Netlify APIs, server runtime, secret keys, or external form endpoint a
 - Interactive range-based before/after simulation, animated counters, six-service accordion, testimonials, and why-ROOFCRAFT editorial section.
 - GSAP timelines and ScrollTriggers are scoped to component lifecycle; media contexts revert on breakpoint changes. One Lenis RAF loop drives smooth scrolling and forwards scroll events to ScrollTrigger. Smooth scrolling pauses while menus/dialogs are open.
 
+## Kinetic motion upgrade
+
+The motion system now uses geometry and physical movement rather than opacity-only entrances:
+
+- **Third pinned sequence — hero disassembly:** the image pushes toward the viewer, the two headline lines rotate and separate in opposite directions, and a rotating architectural seal assembles at the center.
+- A full-width copper ribbon scrolls sideways while its nested wireframe emblems rotate and the band's edges shear.
+- Headline characters rotate up in 3D; editorial headings unfold from clipped perspective planes.
+- Roof layers fan apart with independent horizontal displacement, pitch, and rotation before precisely reassembling. The mobile study has its own scroll-driven lateral assembly.
+- Craft photographs rotate out of skewed polygon masks while their titles straighten in perspective and their oversized indices turn into place.
+- Project panels unskew from sliced polygons; project imagery, service imagery, and approach panels respond to pointer position with restrained 3D tilt.
+- Service imagery uses directional curtain wipes and zoom/rotation, testimonials slide and rotate through masks, and the navigation opens as a staggered clipping curtain.
+- The comparison frame expands from an inset aperture, approach columns rise at different rates, and the footer wordmark hinges upward in perspective.
+
+All three desktop pins are ordered explicitly before ScrollTrigger refresh. GSAP and Lenis use real elapsed time. Film grain is a small static raster texture rather than a continuously rasterized SVG noise filter; the light sweep moves with transforms. Motion contexts, event listeners, and ScrollTriggers are cleaned up on unmount. No new runtime dependencies were introduced.
+
 ## Responsive and accessible behavior
 
 Desktop widths above 900px receive the full pinned narratives. Smaller screens use an expanded, readable roof-layer study and vertically stacked craft panels; no scroll pinning or mouse interactions are required. Navigation collapses at tablet sizes, controls provide comfortable touch targets, forms avoid iOS input zoom, and the gallery supports native horizontal swiping.
@@ -90,7 +105,7 @@ npm run dev
 npm run test:e2e
 ```
 
-Tests cover intro completion, character rendering, two active pins, exploded layer labels, vertical-to-horizontal translation, Lenis activation, gallery controls/dialogs, comparison input, invalid/valid form behavior, console errors, mobile/tablet/desktop widths (320–1440px), reduced motion, and direct URL loads. Run against a production preview with:
+Tests cover intro completion, character rendering, three active pins, measurable hero displacement and zoom, exploded layer labels, vertical-to-horizontal translation, Lenis activation, gallery controls/dialogs, comparison input, invalid/valid form behavior, console errors, mobile/tablet/desktop widths (320–1440px), reduced motion, and direct URL loads. Run against a production preview with:
 
 ```sh
 npm run build

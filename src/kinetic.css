@@ -1,0 +1,278 @@
+.hero-seal {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: min(32vw, 360px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  color: var(--copper);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.hero-seal svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+}
+.hero-seal svg path {
+  transform: translateY(-18px);
+}
+.hero-seal > span {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(30px, 4.5vw, 65px);
+  margin-top: 40%;
+  line-height: 1;
+}
+.hero-seal small {
+  font-size: 7px;
+  letter-spacing: 2px;
+  margin-top: 12px;
+}
+.hero-title .mask {
+  overflow: visible;
+}
+.hero-title {
+  isolation: isolate;
+}
+.hero-content {
+  perspective: 1200px;
+}
+.hero-measure {
+  animation: architectural-orbit 20s linear infinite;
+}
+.hero-shade:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    #d9825018 49.5%,
+    #d9825066 50%,
+    transparent 50.4%
+  );
+  background-size: 200% 100%;
+  animation: roof-sweep 8s ease-in-out infinite alternate;
+}
+.kinetic-ribbon {
+  background: var(--copper);
+  color: #172016;
+  position: relative;
+  overflow: hidden;
+  padding: 70px 0 45px;
+  margin: 0;
+  isolation: isolate;
+}
+.kinetic-track {
+  display: flex;
+  width: max-content;
+  gap: 45px;
+  will-change: transform;
+}
+.kinetic-track > span {
+  display: flex;
+  align-items: center;
+  gap: 45px;
+  white-space: nowrap;
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: clamp(60px, 9vw, 140px);
+  font-weight: 600;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+.kinetic-wire {
+  width: 90px;
+  height: 90px;
+  fill: none;
+  stroke: #182818;
+  stroke-width: 1;
+}
+.ribbon-caption {
+  display: flex;
+  justify-content: space-between;
+  padding: 35px 6% 0;
+  font-size: 8px;
+  letter-spacing: 1.5px;
+}
+.intro-grid,
+.section-heading,
+.why-grid,
+.contact-grid {
+  perspective: 1400px;
+}
+.project-image,
+.service-photo {
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+}
+.craft-visual {
+  perspective: 1000px;
+}
+.craft-copy {
+  perspective: 1000px;
+}
+.craft-copy h2 {
+  transform-origin: left bottom;
+}
+.roof-diagram {
+  perspective: 1100px;
+  transform-style: preserve-3d;
+}
+.roof-layer {
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+}
+.roof-label {
+  backface-visibility: hidden;
+}
+.why-grid {
+  transform-style: preserve-3d;
+}
+.why-grid article {
+  transform-origin: center top;
+}
+footer {
+  perspective: 900px;
+}
+.footer-word {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+.testimonials .quote-layout > div:last-child {
+  overflow: hidden;
+}
+.service-photo {
+  overflow: hidden;
+}
+.service-photo img {
+  transform-origin: 70% 50%;
+}
+.hero-char {
+  transform-origin: 50% 110%;
+  backface-visibility: hidden;
+}
+.service-item button > span:nth-child(2) {
+  transition:
+    letter-spacing 0.5s,
+    transform 0.5s;
+}
+.service-item:hover button > span:nth-child(2) {
+  letter-spacing: 0.1px;
+  transform: translateX(8px);
+}
+.nav-cta svg,
+.button svg {
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.nav-cta:hover svg,
+.button:hover svg {
+  transform: translate(4px, -4px) rotate(45deg);
+}
+@keyframes architectural-orbit {
+  to {
+    transform: rotate(225deg);
+  }
+}
+@keyframes roof-sweep {
+  from {
+    background-position: 130% 0;
+  }
+  to {
+    background-position: -130% 0;
+  }
+}
+@media (max-width: 900px) {
+  .hero-seal {
+    width: 200px;
+    top: 38%;
+  }
+  .hero-seal > span {
+    font-size: 36px;
+  }
+  .hero-seal small {
+    font-size: 5px;
+  }
+  .kinetic-ribbon {
+    padding: 45px 0 35px;
+  }
+  .kinetic-track {
+    gap: 20px;
+  }
+  .kinetic-track > span {
+    gap: 20px;
+    font-size: 70px;
+  }
+  .kinetic-wire {
+    width: 55px;
+    height: 55px;
+  }
+  .ribbon-caption {
+    font-size: 6px;
+    letter-spacing: 1px;
+    padding-top: 25px;
+  }
+  .hero-title .mask {
+    overflow: hidden;
+  }
+  .hero-measure {
+    animation-duration: 30s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-seal {
+    display: none;
+  }
+  .hero-measure,
+  .hero-shade:after {
+    animation: none;
+  }
+  .kinetic-track {
+    transform: none !important;
+    will-change: auto;
+  }
+  .kinetic-ribbon {
+    clip-path: none;
+  }
+  .hero-title .mask {
+    overflow: hidden;
+  }
+  .service-item:hover button > span:nth-child(2) {
+    transform: none;
+  }
+}
+.cursor.is-project:after {
+  content: "DRAG";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: var(--copper);
+}
+.hero:after {
+  background-image: url("/images/grain.png");
+  background-size: 96px 96px;
+}
+.hero-shade:after {
+  background-size: 100% 100%;
+  will-change: transform;
+}
+@keyframes roof-sweep {
+  from {
+    transform: translate3d(-65%, 0, 0);
+  }
+  to {
+    transform: translate3d(65%, 0, 0);
+  }
+}
