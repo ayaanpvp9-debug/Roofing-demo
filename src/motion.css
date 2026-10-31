@@ -1,0 +1,19 @@
+/* Interaction polish: tactile press states, a quiet pointer companion, and page progress. */
+.scroll-progress{position:fixed;inset:0 auto auto 0;width:100%;height:2px;z-index:120;background:linear-gradient(90deg,#b77b50,#e3bd93);transform-origin:left;pointer-events:none;box-shadow:0 0 10px rgba(183,123,80,.35)}
+.pointer-aura{position:fixed;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border:1px solid rgba(201,143,99,.9);border-radius:50%;z-index:95;pointer-events:none;mix-blend-mode:screen;display:grid;place-items:center}
+.pointer-aura i{display:block;width:3px;height:3px;background:#d9a578;border-radius:50%;box-shadow:0 0 7px #d9a578}
+button:active,a:active{scale:.965;transition:scale .14s cubic-bezier(.2,.8,.2,1)}
+button:focus-visible,a:focus-visible{transition:none}
+.service-card,.project-card,.difference-row{transform:translateZ(0)}
+.service-card .service-info h3,.project-caption h3,.difference-row h3{transition:color .35s ease}
+.service-card:hover .service-info h3,.project-card:hover .project-caption h3,.difference-row:hover h3{color:#a76f48}
+.brand-mark{transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.brand:hover .brand-mark{transform:rotate(-7deg) scale(1.04)}
+.image-stamp{animation:stamp-arrive 1.2s .4s both cubic-bezier(.2,.8,.2,1)}
+@keyframes stamp-arrive{from{opacity:0;transform:rotate(-20deg) scale(.86)}to{opacity:1;transform:rotate(-9deg) scale(1)}}
+.step-top i:after{transition:transform .45s ease,background .45s ease}
+.process-step:hover .step-top i:after{transform:scale(2);background:#20221f}
+.modal-close{transition:transform .35s cubic-bezier(.2,.8,.2,1),color .25s ease}
+.modal-close:hover{transform:rotate(90deg);color:#b77b50}
+@media(pointer:coarse){.pointer-aura{display:none}}
+@media(prefers-reduced-motion:reduce){.scroll-progress{display:none}.image-stamp{animation:none}button:active,a:active{transform:none}}
