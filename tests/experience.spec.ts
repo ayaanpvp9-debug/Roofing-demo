@@ -124,11 +124,11 @@ for (const width of [320, 390, 768, 1024, 1440]) {
   });
 }
 
-test("reduced motion and direct URL loading", async ({ page }) => {
+test("full motion and direct URL loading", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/a-direct-url#contact");
   await expect(page.locator("h1")).toContainText("BUILT");
-  await expect(page.locator(".cinematic-intro")).toBeHidden();
-  await expect(page.locator(".pin-spacer")).toHaveCount(0);
-  await expect(page.locator("html")).not.toHaveClass(/lenis/);
+  await expect(page.locator(".cinematic-intro")).toBeHidden({ timeout: 20000 });
+  await expect(page.locator(".pin-spacer")).toHaveCount(3);
+  await expect(page.locator("html")).toHaveClass(/lenis/);
 });

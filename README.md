@@ -84,7 +84,7 @@ All three cross-device pins are ordered explicitly before ScrollTrigger refresh.
 
 All screen widths receive the same three pinned narratives: hero disassembly, roof anatomy, and horizontal craft storytelling. There is no desktop-only or user-agent gate. Smaller screens use a portrait composition, shorter layer spacing, and vertically arranged image/text within each horizontally moving craft panel. Vertical finger swipes drive the sequences using native touch scrolling; Lenis smooths mouse-wheel scrolling without intercepting touch. Pointer-based tilt is an optional enhancement, never a requirement to see the main animations. Navigation, inputs, and project controls remain touch-friendly.
 
-The always-visible **Motion: System / Full / Reduced** selector controls the shared CSS, GSAP, Lenis, and Framer Motion policy. **System** is the default and respects `prefers-reduced-motion`. **Full** is an explicit user opt-in to cinematic motion even when the OS requests reduced motion; **Reduced** skips the intro, smooth scrolling, pins, and nonessential scroll transforms. The preference is saved locally when storage is available and can be changed at any time. Switching back cleans up old pins rather than duplicating them. Refreshes after fonts finish loading, orientation changes, and browser restoration keep scroll positions aligned. Forms use native labels and validation, the range comparison supports keyboard input, dialogs close with Escape and contain Tab navigation, and visible focus styles are provided.
+Full cinematic motion is the fixed mode on every screen. There is no motion selector, no persisted preference, and no system-dependent animation gate. The shared provider sets `data-motion="full"`, and Framer Motion is configured with `reducedMotion="never"`. Old saved `roofcraft-motion` preferences are ignored. The hero's outgoing headline, buttons, and labels become invisible before the ABOVE ALL seal enters; reverse scrolling restores them without moving the buttons downward. Forms use native labels and validation, the range comparison supports keyboard input, dialogs close with Escape and contain Tab navigation, and visible focus styles are provided.
 
 ## Contact form — demonstration only
 
@@ -105,7 +105,7 @@ npm run dev
 npm run test:e2e
 ```
 
-Tests cover intro completion, character rendering, three active pins, measurable hero displacement and zoom, exploded layer labels, vertical-to-horizontal translation, Lenis activation, gallery controls/dialogs, comparison input, invalid/valid form behavior, console errors, mobile/tablet/desktop widths (320–1440px), reduced motion, and direct URL loads. Additional cross-device tests measure the actual hero zoom, text displacement, roof-layer separation, and horizontal track translation at 320px, 390px, 768px, 900px, and 1366px. They also test native touch gestures, orientation changes, and explicit full-motion overrides when the OS requests reduced motion. Run against a production preview with:
+Tests cover intro completion, character rendering, three active pins, measurable hero displacement and zoom, exploded layer labels, vertical-to-horizontal translation, Lenis activation, gallery controls/dialogs, comparison input, invalid/valid form behavior, console errors, mobile/tablet/desktop widths (320–1440px), fixed full-motion behavior, and direct URL loads. Additional cross-device tests measure the actual hero zoom, text displacement, roof-layer separation, and horizontal track translation at 320px, 390px, 768px, 900px, and 1366px. They also test native touch gestures, orientation changes, and fixed full motion even when the OS requests reduced motion, absence of the removed selector, and the hero handoff and reverse-scroll restoration. Run against a production preview with:
 
 ```sh
 npm run build
@@ -115,6 +115,6 @@ TEST_URL=http://localhost:4173 npm run test:e2e
 
 Optional `CHROME_PATH` can point to an existing Chromium binary in constrained environments. Playwright and browser binaries are development-only and never included in the production bundle.
 
-## Seeing an older deployment?
+## Deployment freshness
 
-The updated build includes the **Motion** selector in the bottom-right corner. If that control is missing on a device, it is not running this build. Confirm Render is deploying the branch containing these changes, trigger **Deploy latest commit**, and reload the site. The Blueprint sends `no-cache` for the root HTML and index file while retaining immutable caching for hashed build assets. Desktop-site mode is never required for cinematic motion.
+Confirm Render is deploying the branch containing these changes and use **Deploy latest commit** if an existing site still shows the old motion selector. The Blueprint sends `no-cache` for root HTML while retaining immutable caching for hashed build assets. Desktop-site mode is never required for cinematic motion.

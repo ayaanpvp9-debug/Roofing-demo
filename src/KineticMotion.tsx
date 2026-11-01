@@ -63,13 +63,19 @@ export function useKineticMotion() {
           )
           .to(
             ".hero-bottom",
-            { yPercent: 160, scale: 0.85, ease: "power1.in", duration: 0.8 },
+            { autoAlpha: 0, duration: 0.18, ease: "power2.out" },
             0.1,
+          )
+          .to(".hero-content", { autoAlpha: 0, duration: 0.14 }, 0.26)
+          .to(
+            ".hero-topline, .hero-foot, .vertical-label, .hero-measure, .hero-light",
+            { autoAlpha: 0, duration: 0.18 },
+            0.18,
           )
           .to(
             ".hero-shade",
-            { backgroundColor: "#101211", duration: 0.45 },
-            0.65,
+            { backgroundColor: "#101211", duration: 0.25 },
+            0.25,
           )
           .fromTo(
             ".hero-seal",
@@ -78,10 +84,10 @@ export function useKineticMotion() {
               scale: 1,
               rotation: 0,
               clipPath: "circle(75% at 50% 50%)",
-              duration: 0.6,
+              duration: 0.56,
               ease: "power2.out",
             },
-            0.4,
+            0.44,
           );
 
         gsap.utils

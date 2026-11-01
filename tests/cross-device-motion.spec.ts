@@ -92,24 +92,75 @@ for (const device of [
   });
 }
 
-test("reduced OS setting can be explicitly overridden; the selection persists", async ({
+test("full motion is fixed even with a reduced OS setting or an old saved preference", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() =>
+    localStorage.setItem("roofcraft-motion", "reduced"),
+  );
   await page.goto("/");
-  await expect(page.locator(".pin-spacer")).toHaveCount(0);
-  await expect(page.locator("html")).toHaveAttribute("data-motion", "reduced");
-  await page.getByLabel("Animation preference").selectOption("full");
-  await expect(page.locator(".pin-spacer")).toHaveCount(3);
   await expect(page.locator("html")).toHaveAttribute("data-motion", "full");
-  await expect(page.locator(".hero-seal")).toHaveCSS("display", "flex");
-  await page.reload();
-  await expect(page.getByLabel("Animation preference")).toHaveValue("full");
   await expect(page.locator(".pin-spacer")).toHaveCount(3);
-  await page.getByLabel("Animation preference").selectOption("reduced");
-  await expect(page.locator(".pin-spacer")).toHaveCount(0);
-  await expect(page.locator(".hero-seal")).toHaveCSS("display", "none");
+  await expect(page.getByLabel("Animation preference")).toHaveCount(0);
+  await expect(page.locator(".motion-control")).toHaveCount(0);
+  await expect(page.locator("html")).toHaveClass(/lenis/);
+  await page.reload();
+  await expect(page.locator(".pin-spacer")).toHaveCount(3);
 });
+
+for (const width of [390, 1366]) {
+  test(`hero clears before ABOVE ALL, and restores on reverse scroll at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto("/");
+    await expect(page.locator(".cinematic-intro")).toBeHidden({
+      timeout: 20000,
+    });
+    await page.waitForTimeout(1500);
+    const distance = await page
+      .locator(".hero")
+      .evaluate(
+        (el) =>
+          el.parentElement!.offsetHeight - (el as HTMLElement).offsetHeight,
+      );
+    await page.evaluate((y) => scrollTo(0, y), distance * 0.7);
+    await page.waitForTimeout(1600);
+    for (const selector of [
+      ".hero-content",
+      ".hero-bottom",
+      ".hero-topline",
+      ".hero-foot",
+      ".vertical-label",
+      ".hero-measure",
+    ]) {
+      await expect(page.locator(selector)).toHaveCSS("visibility", "hidden");
+    }
+    expect(
+      await page
+        .locator(".hero-bottom")
+        .evaluate((el) =>
+          Math.abs(new DOMMatrix(getComputedStyle(el).transform).m42),
+        ),
+    ).toBeLessThan(1);
+    expect(
+      await page
+        .locator(".hero-seal")
+        .evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).a),
+    ).toBeGreaterThan(0.5);
+    await page.evaluate(() => scrollTo(0, 0));
+    await page.waitForTimeout(1600);
+    await expect(page.locator(".hero-content")).toHaveCSS(
+      "visibility",
+      "visible",
+    );
+    await expect(page.locator(".hero-bottom")).toHaveCSS(
+      "visibility",
+      "visible",
+    );
+  });
+}
 
 test("crossing the old breakpoint and rotating a phone retains three pins without duplicates", async ({
   page,
