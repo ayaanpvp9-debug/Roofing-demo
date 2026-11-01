@@ -423,7 +423,7 @@
     font-size: 7px;
   }
 }
-@media (max-width: 900px), (prefers-reduced-motion: reduce) {
+@media (max-width: 900px) {
   .anatomy {
     height: auto;
     min-height: 950px;
@@ -544,6 +544,126 @@
     display: none;
   }
 }
+html[data-motion="reduced"] .anatomy {
+  height: auto;
+  min-height: 950px;
+}
+html[data-motion="reduced"] .anatomy-photo {
+  opacity: 0.1;
+}
+html[data-motion="reduced"] .anatomy-heading {
+  padding: 55px 6%;
+}
+html[data-motion="reduced"] .anatomy-heading h2 {
+  font-size: 42px;
+}
+html[data-motion="reduced"] .roof-diagram {
+  top: 470px;
+  left: 9%;
+  width: 48%;
+  height: 170px;
+  opacity: 1;
+}
+html[data-motion="reduced"] .roof-layer:nth-child(1) {
+  transform: translateY(-100px);
+}
+html[data-motion="reduced"] .roof-layer:nth-child(2) {
+  transform: translateY(-30px);
+}
+html[data-motion="reduced"] .roof-layer:nth-child(3) {
+  transform: translateY(40px);
+}
+html[data-motion="reduced"] .roof-layer:nth-child(4) {
+  transform: translateY(110px);
+}
+html[data-motion="reduced"] .roof-label {
+  width: 180px;
+  left: 100%;
+  top: 40%;
+}
+html[data-motion="reduced"] .roof-label small {
+  font-size: 9px;
+}
+html[data-motion="reduced"] .roof-label strong {
+  font-size: 12px;
+}
+html[data-motion="reduced"] .roof-label:before {
+  width: 15px;
+}
+html[data-motion="reduced"] .anatomy-status {
+  display: none;
+}
+html[data-motion="reduced"] .anatomy-complete {
+  opacity: 1;
+  position: static;
+  font-size: 8px;
+}
+html[data-motion="reduced"] .anatomy-bottom {
+  flex-wrap: wrap;
+  bottom: 25px;
+}
+html[data-motion="reduced"] .anatomy-bottom small {
+  margin-left: 0;
+  width: 100%;
+}
+html[data-motion="reduced"] .craft-story {
+  height: auto;
+  min-height: 0;
+  padding: 85px 6% 65px;
+}
+html[data-motion="reduced"] .craft-top {
+  top: 30px;
+}
+html[data-motion="reduced"] .craft-top span:last-child {
+  display: none;
+}
+html[data-motion="reduced"] .craft-track {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+html[data-motion="reduced"] .craft-panel {
+  width: 100%;
+  height: auto;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6%;
+  margin-bottom: 50px;
+}
+html[data-motion="reduced"] .craft-visual {
+  height: 360px;
+}
+html[data-motion="reduced"] .craft-copy {
+  padding: 0;
+}
+html[data-motion="reduced"] .craft-copy h2 {
+  font-size: 40px;
+}
+html[data-motion="reduced"] .craft-copy p {
+  font-size: 12px;
+  margin-top: 20px;
+}
+html[data-motion="reduced"] .craft-copy .eyebrow {
+  padding-bottom: 20px;
+}
+html[data-motion="reduced"] .craft-number {
+  font-size: 40px;
+  margin-top: 20px;
+}
+html[data-motion="reduced"] .craft-progress {
+  bottom: 60px;
+}
+html[data-motion="reduced"] .craft-progress span {
+  transform: scaleX(1);
+}
+html[data-motion="reduced"] .craft-bottom {
+  bottom: 25px;
+}
+html[data-motion="reduced"] .craft-bottom span:last-child {
+  display: none;
+}
+
 @media (max-width: 600px) {
   .hero-measure {
     width: 70px;
@@ -646,24 +766,23 @@
     display: none;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .cinematic-intro {
-    display: none;
-  }
-  .hero-light {
-    animation: none;
-  }
-  .hero-image {
-    will-change: auto;
-  }
-  .anatomy-photo img {
-    transform: none !important;
-  }
-  .hero-char {
-    transform: none !important;
-    opacity: 1 !important;
-  }
+html[data-motion="reduced"] .cinematic-intro {
+  display: none;
 }
+html[data-motion="reduced"] .hero-light {
+  animation: none;
+}
+html[data-motion="reduced"] .hero-image {
+  will-change: auto;
+}
+html[data-motion="reduced"] .anatomy-photo img {
+  transform: none !important;
+}
+html[data-motion="reduced"] .hero-char {
+  transform: none !important;
+  opacity: 1 !important;
+}
+
 .why {
   background: #1b211a;
 }

@@ -228,28 +228,27 @@ footer {
     animation-duration: 30s;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .hero-seal {
-    display: none;
-  }
-  .hero-measure,
-  .hero-shade:after {
-    animation: none;
-  }
-  .kinetic-track {
-    transform: none !important;
-    will-change: auto;
-  }
-  .kinetic-ribbon {
-    clip-path: none;
-  }
-  .hero-title .mask {
-    overflow: hidden;
-  }
-  .service-item:hover button > span:nth-child(2) {
-    transform: none;
-  }
+html[data-motion="reduced"] .hero-seal {
+  display: none;
 }
+html[data-motion="reduced"] .hero-measure,
+html[data-motion="reduced"] .hero-shade:after {
+  animation: none;
+}
+html[data-motion="reduced"] .kinetic-track {
+  transform: none !important;
+  will-change: auto;
+}
+html[data-motion="reduced"] .kinetic-ribbon {
+  clip-path: none;
+}
+html[data-motion="reduced"] .hero-title .mask {
+  overflow: hidden;
+}
+html[data-motion="reduced"] .service-item:hover button > span:nth-child(2) {
+  transform: none;
+}
+
 .cursor.is-project:after {
   content: "DRAG";
   position: absolute;
@@ -274,5 +273,266 @@ footer {
   }
   to {
     transform: translate3d(65%, 0, 0);
+  }
+}
+
+/* The full experience is viewport-independent; only its composition changes. */
+html[data-motion="full"] .anatomy,
+html[data-motion="full"] .craft-story {
+  height: 100svh;
+  min-height: 640px;
+}
+html[data-motion="full"] .roof-layer {
+  transform: none;
+}
+html[data-motion="full"] .anatomy-complete {
+  opacity: 0;
+}
+.motion-control {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #d9825060;
+  background: #111811f2;
+  color: #f0ebdf;
+  box-shadow: 0 4px 20px #0002;
+  font-size: 10px;
+  letter-spacing: 0.4px;
+}
+.motion-control > span:first-child {
+  color: #b0b7a5;
+}
+.motion-control select {
+  margin: 0;
+  padding: 0 16px 0 2px;
+  width: auto;
+  height: 36px;
+  min-height: 36px;
+  border: 0;
+  color: #f0ebdf;
+  font-size: 12px;
+  cursor: pointer;
+}
+.motion-indicator {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #79816e;
+}
+.motion-indicator[data-active="true"] {
+  background: var(--copper);
+  box-shadow: 0 0 8px #d9825050;
+}
+html[data-motion="reduced"] .kinetic-track {
+  will-change: auto;
+}
+@media (max-width: 900px) {
+  html[data-motion="full"] .hero {
+    height: 100svh;
+    min-height: 640px;
+    max-height: none;
+  }
+  html[data-motion="full"] .hero-seal {
+    top: 45%;
+  }
+  html[data-motion="full"] .hero-title .mask {
+    overflow: visible;
+  }
+  html[data-motion="full"] .anatomy-photo {
+    opacity: 0.35;
+  }
+  html[data-motion="full"] .anatomy-heading {
+    padding: 35px 6% 0;
+  }
+  html[data-motion="full"] .anatomy-heading .eyebrow {
+    margin-bottom: 5px;
+    padding-bottom: 20px;
+  }
+  html[data-motion="full"] .anatomy-heading h2 {
+    font-size: clamp(30px, 5.5vw, 42px);
+    line-height: 1.05;
+  }
+  html[data-motion="full"] .anatomy-heading p {
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 15px;
+  }
+  html[data-motion="full"] .roof-diagram {
+    top: 55%;
+    left: 3%;
+    width: 47%;
+    height: 125px;
+  }
+  html[data-motion="full"] .roof-label {
+    width: 44vw;
+    left: 100%;
+    top: 43%;
+    gap: 5px;
+  }
+  html[data-motion="full"] .roof-label strong {
+    font-size: clamp(10px, 1.8vw, 13px);
+  }
+  html[data-motion="full"] .roof-label small {
+    font-size: clamp(8px, 1.4vw, 10px);
+  }
+  html[data-motion="full"] .anatomy-bottom {
+    bottom: 24px;
+    padding-top: 15px;
+    display: flex;
+    gap: 10px;
+  }
+  html[data-motion="full"] .anatomy-status {
+    display: flex;
+    font-size: 7px;
+    letter-spacing: 0.5px;
+  }
+  html[data-motion="full"] .anatomy-complete {
+    position: absolute;
+    left: 0;
+    display: flex;
+  }
+  html[data-motion="full"] .craft-story {
+    padding: 0;
+  }
+  html[data-motion="full"] .craft-track {
+    display: flex;
+    width: max-content;
+    height: 100%;
+  }
+  html[data-motion="full"] .craft-panel {
+    width: 100vw;
+    flex: 0 0 100vw;
+    height: 100%;
+    margin: 0;
+    padding: 85px 6% 90px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 22px;
+    align-items: stretch;
+  }
+  html[data-motion="full"] .craft-visual {
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+  }
+  html[data-motion="full"] .craft-copy {
+    padding: 0;
+    position: relative;
+  }
+  html[data-motion="full"] .craft-copy h2 {
+    font-size: clamp(31px, 6vw, 44px);
+    line-height: 1.06;
+    letter-spacing: -1px;
+  }
+  html[data-motion="full"] .craft-copy h2 br {
+    display: none;
+  }
+  html[data-motion="full"] .craft-copy .eyebrow {
+    padding-bottom: 12px;
+    font-size: 8px;
+  }
+  html[data-motion="full"] .craft-copy p {
+    font-size: 12px;
+    line-height: 1.65;
+    margin-top: 14px;
+    max-width: 560px;
+  }
+  html[data-motion="full"] .craft-number {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    font-size: 30px;
+  }
+  html[data-motion="full"] .craft-progress {
+    bottom: 65px;
+  }
+  html[data-motion="full"] .craft-progress span {
+    transform: scaleX(0);
+  }
+  html[data-motion="full"] .craft-bottom {
+    bottom: 30px;
+  }
+}
+@media (max-width: 900px) and (max-height: 700px) {
+  html[data-motion="full"] .anatomy-heading {
+    padding-top: 25px;
+  }
+  html[data-motion="full"] .anatomy-heading h2 {
+    font-size: 30px;
+  }
+  html[data-motion="full"] .anatomy-heading p {
+    margin-top: 10px;
+  }
+  html[data-motion="full"] .roof-diagram {
+    top: 53%;
+  }
+  html[data-motion="full"] .craft-panel {
+    padding-top: 70px;
+    gap: 16px;
+  }
+  html[data-motion="full"] .craft-top {
+    top: 25px;
+  }
+  html[data-motion="full"] .hero-topline {
+    top: 110px;
+  }
+}
+@media (max-width: 900px) and (max-height: 700px) {
+  html[data-motion="full"] .hero,
+  html[data-motion="full"] .anatomy,
+  html[data-motion="full"] .craft-story {
+    min-height: 560px;
+  }
+  html[data-motion="full"] .roof-diagram {
+    height: 110px;
+  }
+  html[data-motion="full"] .craft-copy p {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+}
+@media (pointer: coarse) {
+  .motion-control select {
+    font-size: 16px;
+  }
+}
+/* Percent padding inside a 300vw track uses the track width, not the viewport. */
+html[data-motion="full"] .craft-panel {
+  padding-left: 6vw;
+  padding-right: 6vw;
+}
+html[data-motion="full"] .craft-copy {
+  padding-right: 0;
+}
+@media (max-width: 900px) {
+  html[data-motion="full"] .anatomy-bottom {
+    bottom: 74px;
+  }
+  html[data-motion="full"] .craft-panel {
+    padding-bottom: 130px;
+  }
+  html[data-motion="full"] .craft-progress {
+    bottom: 105px;
+  }
+  html[data-motion="full"] .craft-bottom {
+    bottom: 72px;
+  }
+  html[data-motion="full"] .craft-copy .eyebrow {
+    padding-bottom: 22px;
+  }
+  html[data-motion="full"] .craft-copy h2 em:before {
+    content: " ";
+    white-space: pre;
+  }
+  html[data-motion="full"] .hero-foot > span {
+    display: none;
   }
 }

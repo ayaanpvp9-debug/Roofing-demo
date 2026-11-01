@@ -1,3 +1,4 @@
+import { motionEnabled } from "./MotionPreference";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -21,7 +22,7 @@ export function SplitText({ text }: { text: string }) {
 export function CinematicIntro() {
   const ref = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!motionEnabled()) {
       ref.current?.removeAttribute("data-playing");
       return;
     }
@@ -134,8 +135,9 @@ export function RoofAnatomy() {
   useLayoutEffect(() => {
     const mm = gsap.matchMedia();
     mm.add(
-      "(min-width: 901px) and (prefers-reduced-motion: no-preference)",
+      "(min-width: 0px)",
       () => {
+        if (!motionEnabled()) return;
         const timeline = gsap.timeline({
           scrollTrigger: {
             id: "roof-anatomy",
@@ -178,8 +180,8 @@ export function RoofAnatomy() {
             ".roof-layer",
             { y: 0, rotationX: 0, rotationZ: 0, x: 0 },
             {
-              y: (i) => (i - 1.5) * 80,
-              x: (i) => (i - 1.5) * 14,
+              y: (i) => (i - 1.5) * (innerWidth <= 900 ? 55 : 80),
+              x: (i) => (i - 1.5) * (innerWidth <= 900 ? 4 : 14),
               rotationX: 18,
               rotationZ: (i) => (i - 1.5) * 4,
               stagger: 0.08,
@@ -344,8 +346,9 @@ export function CraftStory() {
   useLayoutEffect(() => {
     const mm = gsap.matchMedia();
     mm.add(
-      "(min-width: 901px) and (prefers-reduced-motion: no-preference)",
+      "(min-width: 0px)",
       () => {
+        if (!motionEnabled()) return;
         const distance = () =>
           track.current!.scrollWidth - ref.current!.clientWidth;
         const tl = gsap.timeline({

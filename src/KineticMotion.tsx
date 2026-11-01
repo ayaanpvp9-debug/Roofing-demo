@@ -1,3 +1,4 @@
+import { motionEnabled } from "./MotionPreference";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -12,20 +13,19 @@ export function useKineticMotion() {
       {
         desktop: "(min-width: 901px)",
         mobile: "(max-width: 900px)",
-        motion: "(prefers-reduced-motion: no-preference)",
       },
       (context) => {
-        if (!context.conditions?.motion) return;
-        const desktop = context.conditions.desktop;
+        if (!motionEnabled()) return;
+        const desktop = context.conditions?.desktop;
         const hero = gsap.timeline({
           scrollTrigger: {
             id: "hero-disassemble",
             refreshPriority: 10,
             trigger: ".hero",
             start: "top top",
-            end: desktop ? "+=110%" : "bottom top",
+            end: "+=110%",
             scrub: 0.65,
-            pin: !!desktop,
+            pin: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
           },
@@ -34,7 +34,7 @@ export function useKineticMotion() {
           .to(
             ".hero-image",
             {
-              scale: desktop ? 1.65 : 1.2,
+              scale: desktop ? 1.65 : 1.5,
               yPercent: 12,
               ease: "none",
               duration: 1,
@@ -44,7 +44,7 @@ export function useKineticMotion() {
           .to(
             ".hero-title .mask:first-child .word",
             {
-              xPercent: desktop ? -90 : -35,
+              xPercent: -90,
               rotation: -7,
               ease: "power1.in",
               duration: 1,
@@ -54,7 +54,7 @@ export function useKineticMotion() {
           .to(
             ".hero-title .mask:last-child .word",
             {
-              xPercent: desktop ? 90 : 35,
+              xPercent: 90,
               rotation: 7,
               ease: "power1.in",
               duration: 1,
@@ -196,47 +196,10 @@ export function useKineticMotion() {
           },
         );
 
-        if (!desktop) {
-          gsap.utils.toArray<HTMLElement>(".roof-layer").forEach((layer, i) => {
-            gsap.fromTo(
-              layer,
-              { xPercent: i % 2 ? 85 : -85, rotationY: i % 2 ? -50 : 50 },
-              {
-                xPercent: 0,
-                rotationY: 0,
-                ease: "power2.out",
-                scrollTrigger: {
-                  trigger: ".roof-diagram",
-                  start: "top 95%",
-                  end: "center 55%",
-                  scrub: 0.8,
-                },
-              },
-            );
-          });
-          gsap.utils.toArray<HTMLElement>(".craft-visual").forEach((el) => {
-            gsap.fromTo(
-              el,
-              {
-                rotationZ: -8,
-                scale: 0.8,
-                clipPath: "polygon(15% 0,100% 15%,85% 100%,0 85%)",
-              },
-              {
-                rotationZ: 0,
-                scale: 1,
-                clipPath: "polygon(0 0,100% 0,100% 100%,0 100%)",
-                ease: "none",
-                scrollTrigger: {
-                  trigger: el,
-                  start: "top 95%",
-                  end: "top 35%",
-                  scrub: 0.6,
-                },
-              },
-            );
-          });
-        }
+        const refreshFrame = requestAnimationFrame(() => {
+          ScrollTrigger.sort();
+          ScrollTrigger.refresh();
+        });
         if (matchMedia("(hover:hover) and (pointer:fine)").matches) {
           const clean: (() => void)[] = [];
           document
@@ -269,8 +232,12 @@ export function useKineticMotion() {
                 el.removeEventListener("pointerleave", leave);
               });
             });
-          return () => clean.forEach((fn) => fn());
+          return () => {
+            cancelAnimationFrame(refreshFrame);
+            clean.forEach((fn) => fn());
+          };
         }
+        return () => cancelAnimationFrame(refreshFrame);
       },
     );
     return () => mm.revert();
@@ -296,8 +263,9 @@ export function KineticRibbon() {
   useLayoutEffect(() => {
     const mm = gsap.matchMedia();
     mm.add(
-      "(prefers-reduced-motion: no-preference)",
+      "(min-width: 0px)",
       () => {
+        if (!motionEnabled()) return;
         gsap.to(".kinetic-track", {
           xPercent: -35,
           ease: "none",

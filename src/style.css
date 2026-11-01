@@ -1599,19 +1599,17 @@ footer {
     display: none;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *:before,
-  *:after {
-    animation: none !important;
-    transition: none !important;
-  }
-  .cursor {
-    display: none;
-  }
+html[data-motion="reduced"] {
+  scroll-behavior: auto;
+}
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *:before,
+html[data-motion="reduced"] *:after {
+  animation: none !important;
+  transition: none !important;
+}
+html[data-motion="reduced"] .cursor {
+  display: none;
 }
 
 /* Cross-device layout safeguards */
@@ -1933,8 +1931,6 @@ form textarea:focus-visible {
     opacity: 1;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .projects {
-    scroll-behavior: auto;
-  }
+html[data-motion="reduced"] .projects {
+  scroll-behavior: auto;
 }

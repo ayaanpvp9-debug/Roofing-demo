@@ -1,3 +1,4 @@
+import { MotionPreferenceProvider, motionEnabled } from "./MotionPreference";
 import { useKineticMotion, HeroSeal, KineticRibbon } from "./KineticMotion";
 import React, { useState, useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
@@ -14,7 +15,7 @@ import {
   Check,
   MoveHorizontal,
 } from "lucide-react";
-import { motion, AnimatePresence, MotionConfig } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
@@ -26,6 +27,7 @@ import {
   SplitText,
 } from "./Storytelling";
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ ignoreMobileResize: true });
 // Keep GSAP and Lenis on real elapsed time, including after slow frames.
 gsap.ticker.lagSmoothing(0);
 const images = {
@@ -107,13 +109,17 @@ function App() {
     gallery = useRef<HTMLDivElement>(null);
   const smoothScroll = useRef<Lenis | null>(null);
   useEffect(() => {
-    const reduce = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const reduce = !motionEnabled();
     let lenis: Lenis | undefined,
       raf = 0;
     if (!reduce) {
-      lenis = new Lenis({ duration: 1.15, smoothWheel: true, anchors: true });
+      lenis = new Lenis({
+        duration: 1.15,
+        smoothWheel: true,
+        syncTouch: false,
+        anchors: true,
+        respectReducedMotion: false,
+      });
       smoothScroll.current = lenis;
       const tick = (t: number) => {
         lenis!.raf(t);
@@ -168,6 +174,25 @@ function App() {
     }, root);
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
+    let disposed = false;
+    let refreshFrame = 0;
+    const refreshScenes = () => {
+      cancelAnimationFrame(refreshFrame);
+      refreshFrame = requestAnimationFrame(() => {
+        if (disposed) return;
+        ScrollTrigger.sort();
+        ScrollTrigger.refresh();
+      });
+    };
+    const onVisible = () => {
+      if (!document.hidden) refreshScenes();
+    };
+    window.addEventListener("pageshow", refreshScenes);
+    window.addEventListener("orientationchange", refreshScenes);
+    document.addEventListener("visibilitychange", onVisible);
+    document.fonts.ready.then(() => {
+      if (!disposed) refreshScenes();
+    });
     const cursor = document.querySelector<HTMLElement>(".cursor");
     const move = (e: PointerEvent) => {
       if (cursor) {
@@ -177,6 +202,11 @@ function App() {
     };
     window.addEventListener("pointermove", move);
     return () => {
+      disposed = true;
+      cancelAnimationFrame(refreshFrame);
+      window.removeEventListener("pageshow", refreshScenes);
+      window.removeEventListener("orientationchange", refreshScenes);
+      document.removeEventListener("visibilitychange", onVisible);
       ctx.revert();
       lenis?.destroy();
       cancelAnimationFrame(raf);
@@ -219,11 +249,7 @@ function App() {
     return () => document.removeEventListener("keydown", key);
   }, [menu, activeProject]);
   useEffect(() => {
-    if (
-      !matchMedia("(hover:hover) and (prefers-reduced-motion:no-preference)")
-        .matches
-    )
-      return;
+    if (!motionEnabled() || !matchMedia("(hover:hover)").matches) return;
     const clean: (() => void)[] = [];
     document
       .querySelectorAll<HTMLElement>(".magnetic,.gallery-controls button")
@@ -270,9 +296,8 @@ function App() {
   }, []);
   useEffect(() => {
     if (
-      !matchMedia(
-        "(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference)",
-      ).matches
+      !motionEnabled() ||
+      !matchMedia("(hover:hover) and (pointer:fine)").matches
     )
       return;
     const hero = document.querySelector<HTMLElement>(".hero")!;
@@ -1138,7 +1163,7 @@ function App() {
   );
 }
 createRoot(document.getElementById("root")!).render(
-  <MotionConfig reducedMotion="user">
+  <MotionPreferenceProvider>
     <App />
-  </MotionConfig>,
+  </MotionPreferenceProvider>,
 );

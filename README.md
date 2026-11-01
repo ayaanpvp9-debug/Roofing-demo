@@ -72,19 +72,19 @@ The motion system now uses geometry and physical movement rather than opacity-on
 - **Third pinned sequence — hero disassembly:** the image pushes toward the viewer, the two headline lines rotate and separate in opposite directions, and a rotating architectural seal assembles at the center.
 - A full-width copper ribbon scrolls sideways while its nested wireframe emblems rotate and the band's edges shear.
 - Headline characters rotate up in 3D; editorial headings unfold from clipped perspective planes.
-- Roof layers fan apart with independent horizontal displacement, pitch, and rotation before precisely reassembling. The mobile study has its own scroll-driven lateral assembly.
+- Roof layers fan apart with independent horizontal displacement, pitch, and rotation before precisely reassembling. The same assembly timeline runs on phones, with spacing adapted to the screen.
 - Craft photographs rotate out of skewed polygon masks while their titles straighten in perspective and their oversized indices turn into place.
 - Project panels unskew from sliced polygons; project imagery, service imagery, and approach panels respond to pointer position with restrained 3D tilt.
 - Service imagery uses directional curtain wipes and zoom/rotation, testimonials slide and rotate through masks, and the navigation opens as a staggered clipping curtain.
 - The comparison frame expands from an inset aperture, approach columns rise at different rates, and the footer wordmark hinges upward in perspective.
 
-All three desktop pins are ordered explicitly before ScrollTrigger refresh. GSAP and Lenis use real elapsed time. Film grain is a small static raster texture rather than a continuously rasterized SVG noise filter; the light sweep moves with transforms. Motion contexts, event listeners, and ScrollTriggers are cleaned up on unmount. No new runtime dependencies were introduced.
+All three cross-device pins are ordered explicitly before ScrollTrigger refresh. GSAP and Lenis use real elapsed time. Film grain is a small static raster texture rather than a continuously rasterized SVG noise filter; the light sweep moves with transforms. Motion contexts, event listeners, and ScrollTriggers are cleaned up on unmount. No new runtime dependencies were introduced.
 
 ## Responsive and accessible behavior
 
-Desktop widths above 900px receive the full pinned narratives. Smaller screens use an expanded, readable roof-layer study and vertically stacked craft panels; no scroll pinning or mouse interactions are required. Navigation collapses at tablet sizes, controls provide comfortable touch targets, forms avoid iOS input zoom, and the gallery supports native horizontal swiping.
+All screen widths receive the same three pinned narratives: hero disassembly, roof anatomy, and horizontal craft storytelling. There is no desktop-only or user-agent gate. Smaller screens use a portrait composition, shorter layer spacing, and vertically arranged image/text within each horizontally moving craft panel. Vertical finger swipes drive the sequences using native touch scrolling; Lenis smooths mouse-wheel scrolling without intercepting touch. Pointer-based tilt is an optional enhancement, never a requirement to see the main animations. Navigation, inputs, and project controls remain touch-friendly.
 
-`prefers-reduced-motion` skips the intro, smooth scrolling, pins, hero motion, and GSAP scroll reveals. Framer Motion also honors the user preference. Forms use native labels and validation, the range comparison supports keyboard input, dialogs close with Escape and contain Tab navigation, and visible focus styles are provided.
+The always-visible **Motion: System / Full / Reduced** selector controls the shared CSS, GSAP, Lenis, and Framer Motion policy. **System** is the default and respects `prefers-reduced-motion`. **Full** is an explicit user opt-in to cinematic motion even when the OS requests reduced motion; **Reduced** skips the intro, smooth scrolling, pins, and nonessential scroll transforms. The preference is saved locally when storage is available and can be changed at any time. Switching back cleans up old pins rather than duplicating them. Refreshes after fonts finish loading, orientation changes, and browser restoration keep scroll positions aligned. Forms use native labels and validation, the range comparison supports keyboard input, dialogs close with Escape and contain Tab navigation, and visible focus styles are provided.
 
 ## Contact form — demonstration only
 
@@ -105,7 +105,7 @@ npm run dev
 npm run test:e2e
 ```
 
-Tests cover intro completion, character rendering, three active pins, measurable hero displacement and zoom, exploded layer labels, vertical-to-horizontal translation, Lenis activation, gallery controls/dialogs, comparison input, invalid/valid form behavior, console errors, mobile/tablet/desktop widths (320–1440px), reduced motion, and direct URL loads. Run against a production preview with:
+Tests cover intro completion, character rendering, three active pins, measurable hero displacement and zoom, exploded layer labels, vertical-to-horizontal translation, Lenis activation, gallery controls/dialogs, comparison input, invalid/valid form behavior, console errors, mobile/tablet/desktop widths (320–1440px), reduced motion, and direct URL loads. Additional cross-device tests measure the actual hero zoom, text displacement, roof-layer separation, and horizontal track translation at 320px, 390px, 768px, 900px, and 1366px. They also test native touch gestures, orientation changes, and explicit full-motion overrides when the OS requests reduced motion. Run against a production preview with:
 
 ```sh
 npm run build
@@ -114,3 +114,7 @@ TEST_URL=http://localhost:4173 npm run test:e2e
 ```
 
 Optional `CHROME_PATH` can point to an existing Chromium binary in constrained environments. Playwright and browser binaries are development-only and never included in the production bundle.
+
+## Seeing an older deployment?
+
+The updated build includes the **Motion** selector in the bottom-right corner. If that control is missing on a device, it is not running this build. Confirm Render is deploying the branch containing these changes, trigger **Deploy latest commit**, and reload the site. The Blueprint sends `no-cache` for the root HTML and index file while retaining immutable caching for hashed build assets. Desktop-site mode is never required for cinematic motion.
