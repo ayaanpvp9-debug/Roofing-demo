@@ -86,6 +86,12 @@ All screen widths receive the same three pinned narratives: hero disassembly, ro
 
 Full cinematic motion is the fixed mode on every screen. There is no motion selector, no persisted preference, and no system-dependent animation gate. The shared provider sets `data-motion="full"`, and Framer Motion is configured with `reducedMotion="never"`. Old saved `roofcraft-motion` preferences are ignored. The hero's outgoing headline, buttons, and labels become invisible before the ABOVE ALL seal enters; reverse scrolling restores them without moving the buttons downward. Forms use native labels and validation, the range comparison supports keyboard input, dialogs close with Escape and contain Tab navigation, and visible focus styles are provided.
 
+## Architectural cursor
+
+Mouse users get a copper tracking point with a GSAP-smoothed crosshair ring. Links expand the ring, project previews show **VIEW**, a pressed gallery shows **DRAG**, and the before/after comparison shows **SLIDE**. Pressing the mouse contracts the ring. Native cursors remain available until the first valid mouse movement and are restored over editable fields, on window blur, and when the pointer leaves the page. Touch events never activate the cursor; hybrid devices can switch input without losing their native fallback. The overlay cannot intercept clicks and is hidden from assistive technology. Its event handlers update DOM transforms without React re-renders and are cleaned up on unmount.
+
+`tests/cursor.spec.ts` verifies tracking, link/click feedback, context labels, form entry, and touch fallback against the production build.
+
 ## Contact form — demonstration only
 
 The form validates required fields, email format, and phone characters in the browser. On valid input it states **“Your details are validated. Nothing has been sent or stored.”** It does **not** fake a delivered estimate, store personal data, or make a network submission. Actual message delivery requires implementing a backend or connecting a form service, with appropriate consent, privacy policies, abuse protection, and error handling. The `.example` email address is intentionally not a real business inbox.

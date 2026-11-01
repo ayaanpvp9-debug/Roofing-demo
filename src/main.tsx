@@ -1,3 +1,4 @@
+import { ArchitecturalCursor } from "./ArchitecturalCursor";
 import { MotionPreferenceProvider, motionEnabled } from "./MotionPreference";
 import { useKineticMotion, HeroSeal, KineticRibbon } from "./KineticMotion";
 import React, { useState, useEffect, useRef } from "react";
@@ -193,14 +194,6 @@ function App() {
     document.fonts.ready.then(() => {
       if (!disposed) refreshScenes();
     });
-    const cursor = document.querySelector<HTMLElement>(".cursor");
-    const move = (e: PointerEvent) => {
-      if (cursor) {
-        cursor.style.left = e.clientX + "px";
-        cursor.style.top = e.clientY + "px";
-      }
-    };
-    window.addEventListener("pointermove", move);
     return () => {
       disposed = true;
       cancelAnimationFrame(refreshFrame);
@@ -210,7 +203,6 @@ function App() {
       ctx.revert();
       lenis?.destroy();
       cancelAnimationFrame(raf);
-      window.removeEventListener("pointermove", move);
     };
   }, []);
   useEffect(() => {
@@ -313,17 +305,9 @@ function App() {
     const leave = () => gsap.to(image, { x: 0, rotation: 0, duration: 1 });
     hero.addEventListener("pointermove", move);
     hero.addEventListener("pointerleave", leave);
-    const cursor = document.querySelector(".cursor");
-    const over = (e: PointerEvent) =>
-      cursor?.classList.toggle(
-        "is-project",
-        !!(e.target as Element).closest(".project"),
-      );
-    document.addEventListener("pointerover", over);
     return () => {
       hero.removeEventListener("pointermove", move);
       hero.removeEventListener("pointerleave", leave);
-      document.removeEventListener("pointerover", over);
       gsap.killTweensOf(image);
     };
   }, []);
@@ -394,7 +378,7 @@ function App() {
   return (
     <div ref={root}>
       <CinematicIntro />
-      <div className="cursor" />
+      <ArchitecturalCursor />
       <motion.div className="progress" style={{ scaleX: undefined }} />
       <header>
         <a className="brand" href="#home" aria-label="Roofcraft home">

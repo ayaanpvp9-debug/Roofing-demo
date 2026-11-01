@@ -394,11 +394,7 @@
   transform: scaleX(0.1);
   transform-origin: left;
 }
-.cursor.is-project {
-  width: 45px;
-  height: 45px;
-  background: #d9825025;
-}
+
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }

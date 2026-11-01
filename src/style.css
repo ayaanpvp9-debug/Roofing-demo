@@ -1142,20 +1142,7 @@ footer {
 .project-modal .eyebrow {
   padding: 0;
 }
-.cursor {
-  pointer-events: none;
-  position: fixed;
-  z-index: 200;
-  width: 9px;
-  height: 9px;
-  border: 1px solid var(--copper);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
-  transition:
-    width 0.2s,
-    height 0.2s;
-}
+
 .progress {
   position: fixed;
   top: 0;
@@ -1595,9 +1582,6 @@ footer {
   .project-modal h2 {
     font-size: 30px;
   }
-  .cursor {
-    display: none;
-  }
 }
 html[data-motion="reduced"] {
   scroll-behavior: auto;
@@ -1607,9 +1591,6 @@ html[data-motion="reduced"] *:before,
 html[data-motion="reduced"] *:after {
   animation: none !important;
   transition: none !important;
-}
-html[data-motion="reduced"] .cursor {
-  display: none;
 }
 
 /* Cross-device layout safeguards */
@@ -1918,9 +1899,6 @@ form textarea:focus-visible {
   }
 }
 @media (hover: none), (pointer: coarse) {
-  .cursor {
-    display: none;
-  }
   .project:hover img {
     transform: none;
   }
